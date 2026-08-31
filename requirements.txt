@@ -1,0 +1,11 @@
+# Dependencias del Taller Sistemas Distribuidos
+# Instalar con: pip install -r requirements.txt
+
+# ── Parte 1: REST ──────────────────────────────────────────
+flask==3.0.3          # Servidor HTTP ligero
+requests==2.32.3      # Cliente HTTP
+
+# ── Parte 2: gRPC ──────────────────────────────────────────
+grpcio==1.64.1                # Runtime gRPC
+grpcio-tools==1.64.1          # Compilador protoc para Python
+protobuf==5.27.2              # Soporte Protocol Buffers

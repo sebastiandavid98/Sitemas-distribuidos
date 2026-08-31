@@ -1,0 +1,71 @@
+// ============================================================
+// PARTE 2 - DEFINICIÓN DEL SERVICIO gRPC
+// Archivo: inventario.proto
+// Protocolo: Protocol Buffers v3  (serialización binaria)
+//            transportado sobre HTTP/2
+// ============================================================
+
+syntax = "proto3";
+
+package inventario;
+
+// ------------------------------------------------------------
+// MENSAJES  (equivalen a los modelos / DTOs)
+// ------------------------------------------------------------
+
+// Solicitud para obtener un producto por su ID
+message SolicitudProducto {
+  int32 id = 1;
+}
+
+// Solicitud para registrar un nuevo producto
+message NuevoProducto {
+  string nombre    = 1;
+  float  precio    = 2;
+  int32  stock     = 3;
+  string categoria = 4;
+}
+
+// Representación completa de un producto
+message Producto {
+  int32  id        = 1;
+  string nombre    = 2;
+  float  precio    = 3;
+  int32  stock     = 4;
+  string categoria = 5;
+}
+
+// Respuesta que contiene la lista completa del catálogo
+message CatalogoProductos {
+  int32             total     = 1;
+  repeated Producto productos = 2;
+}
+
+// Respuesta genérica de confirmación
+message Confirmacion {
+  bool   exito   = 1;
+  string mensaje = 2;
+  Producto producto = 3;   // producto creado (si aplica)
+}
+
+// Solicitud vacía (para listar sin parámetros)
+message SolicitudVacia {}
+
+// ------------------------------------------------------------
+// SERVICIO  (define los métodos RPC disponibles)
+// ------------------------------------------------------------
+
+service Inventario {
+
+  // Obtiene un producto por ID  (Unary RPC)
+  rpc ObtenerProducto(SolicitudProducto) returns (Producto);
+
+  // Lista el catálogo completo   (Unary RPC)
+  rpc ListarProductos(SolicitudVacia) returns (CatalogoProductos);
+
+  // Registra un nuevo producto   (Unary RPC)
+  rpc CrearProducto(NuevoProducto) returns (Confirmacion);
+
+  // Transmite productos de uno en uno (Server-Side Streaming RPC)
+  rpc TransmitirCatalogo(SolicitudVacia) returns (stream Producto);
+}
